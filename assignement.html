@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>String Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        h1 {
+            text-align: center;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>String Calculator</h1>
+    <input type="text" id="inputNumbers" placeholder="Enter numbers (comma or newline separated)">
+    <button id="calculateBtn">Calculate</button>
+    <div class="result" id="resultDisplay"></div>
+</div>
+
+<script>
+    // Function to calculate the sum of numbers from the input
+    function add(numbers) {
+        if (numbers === "") {
+            return 0;
+        }
+
+        const numberArray = numbers.replace(/\n/g, ',').split(',');
+
+        const negativeNumbers = [];
+
+        const sum = numberArray.reduce((accumulator, currentValue) => {
+            const number = parseInt(currentValue, 10);
+
+            if (number < 0) {
+                negativeNumbers.push(number);
+            }
+
+            return accumulator + number;
+        }, 0);
+
+        if (negativeNumbers.length > 0) {
+            throw new Error("Negative numbers not allowed: " + negativeNumbers.join(", "));
+        }
+
+        return sum;
+    }
+
+    // Add click event to the Calculate button
+    document.getElementById('calculateBtn').addEventListener('click', function() {
+        const inputNumbers = document.getElementById('inputNumbers').value;
+        const resultDisplay = document.getElementById('resultDisplay');
+
+        try {
+            const result = add(inputNumbers);
+            resultDisplay.innerHTML = `Result: ${result}`;
+            resultDisplay.classList.remove('error');
+        } catch (error) {
+            resultDisplay.innerHTML = error.message;
+            resultDisplay.classList.add('error');
+        }
+    });
+</script>
+
+</body>
+</html>
